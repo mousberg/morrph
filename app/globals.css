@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Light mode, hairline borders, 5px corners and one easing curve. */
+@theme {
+  --color-bg: #fafafa;
+  --color-panel: #ffffff;
+  --color-line: rgb(0 0 0 / 0.08);
+  --color-line-strong: rgb(0 0 0 / 0.16);
+  --color-text: #0b0b0c;
+  --color-muted: #6e6e74;
+  --color-faint: #a4a4aa;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --radius: 5px;
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden; /* one fixed scene: nothing scrolls */
+  overscroll-behavior: none;
+  background: var(--color-bg);
+  color: var(--color-text);
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(0 0 0 / 0.1);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.55s var(--ease-premium) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+@keyframes drift {
+  to {
+    stroke-dashoffset: -201;
+  }
+}
+
+/* The dotted frame's dots travel slowly around the page edge while files hover over it. */
+.drift {
+  animation: drift 9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift,
+  .rise {
+    animation: none;
+  }
+}
+
+/* The export menu, folded away behind its tile. It grows from the tile's corner. */
+.export-panel {
+  transform-origin: 100% 100%;
+  opacity: 0;
+  transform: translateY(6px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 180ms var(--ease-premium), transform 260ms var(--ease-premium);
+}
+.export-panel[data-open="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* What an export just did, said once and then gone. */
+.toast {
+  animation: toast 2.4s var(--ease-premium) both;
+}
+@keyframes toast {
+  0% { opacity: 0; transform: translate(-50%, 6px); }
+  8% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -6px); }
+}
